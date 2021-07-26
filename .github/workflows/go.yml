@@ -21,9 +21,14 @@ jobs:
 
       - name: Test
         run: go test -v ./...
+        
+      - name: SHA256sum 
+        run: sha256sum bin/vault-k8s-secret-engine >> vault-k8s-secret-engine.sha256
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
           name: vault-k8s-secret-engine
-          path: bin/vault-k8s-secret-engine
+          path: | 
+            bin/vault-k8s-secret-engine
+            vault-k8s-secret-engine.sha256
