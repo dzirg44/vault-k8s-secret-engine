@@ -11,10 +11,8 @@ env:
  GOOS: "linux" 
  GOARCH: "amd64"
  ORG: "dzirg44"
- GITHUB_REPO_HTTPS_URL: "https://github.com/${{ env.GITHUB_REPOSITORY }}"
  GHCR_NAME: "vault-k8s-secret-engine" 
  
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -53,7 +51,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           echo $CR_PAT | docker login ghcr.io -u ${{ env.ORG }} --password-stdin
-          docker build . --tag ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
+          docker build --build-arg GITHUB_REPO_HTTPS_URL=https://github.com/${{ env.GITHUB_REPOSITORY }} . --tag ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
           docker run ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
           docker push ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
         env:
