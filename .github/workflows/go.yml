@@ -10,12 +10,23 @@ env:
  CGO_ENABLED: 0 
  GOOS: "linux" 
  GOARCH: "amd64"
+ ORG: "dzirg44"
+ GITHUB_REPO_HTTPS_URL: "https://github.com/${{ env.GITHUB_REPOSITORY }}"
+ GHCR_NAME: "vault-k8s-secret-engine" 
+ 
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
+    steps:        
       - uses: actions/checkout@v2
+      
+      - name: Branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -37,3 +48,16 @@ jobs:
         env:
           GHR_PATH: bin/
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Build and Push Docker image
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo $CR_PAT | docker login ghcr.io -u ${{ env.ORG }} --password-stdin
+          docker build . --tag ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
+          docker run ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
+          docker push ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
+        env:
+          CR_PAT: ${{ secrets.CR_PAT }}
+          SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
+          SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
+          SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
