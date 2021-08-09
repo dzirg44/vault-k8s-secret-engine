@@ -58,13 +58,15 @@ jobs:
       - name: Build and Push Docker image
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          docker build --build-arg GITHUB_REPO_HTTPS_URL=https://github.com/${GITHUB_REPOSITORY} . --tag ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
-          docker run ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
-          docker push ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
+          echo "${SOURCE_TAG} ${GITHUB_REPOSITORY} ${{ env.ORG }}"
         env:
-          #CR_PAT: ${{ secrets.CR_PAT }}
-          #echo $CR_PAT
-          #echo $CR_PAT | docker login ghcr.io -u ${{ env.ORG }} --password-stdin
           SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
           SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
           SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+
+          #CR_PAT: ${{ secrets.CR_PAT }}
+          #echo $CR_PAT
+          #echo $CR_PAT | docker login ghcr.io -u ${{ env.ORG }} --password-stdin
+          #docker build --build-arg GITHUB_REPO_HTTPS_URL=https://github.com/${GITHUB_REPOSITORY} . --tag ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
+          #docker run ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
+          #docker push ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
