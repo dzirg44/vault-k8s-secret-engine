@@ -58,9 +58,9 @@ jobs:
       - name: Build and Push Docker image
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          docker build --build-arg GITHUB_REPO_HTTPS_URL=https://github.com/${GITHUB_REPOSITORY} . --tag ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
-          docker run ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
-          docker push ghcr.io/${{ env.ORG }}/{{ env.GHCR_NAME }}:${SOURCE_TAG}
+          docker build --build-arg GITHUB_REPO_HTTPS_URL=https://github.com/${GITHUB_REPOSITORY} . --tag ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
+          docker run ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
+          docker push ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
         env:
           #CR_PAT: ${{ secrets.CR_PAT }}
           #echo $CR_PAT
