@@ -60,6 +60,7 @@ jobs:
         run: |
           echo "${SOURCE_TAG} ${GITHUB_REPOSITORY} ${{ env.ORG }}"
           docker build --build-arg GITHUB_REPO_HTTPS_URL=https://github.com/${GITHUB_REPOSITORY} . --tag ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
+          docker push ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${SOURCE_TAG}
         env:
           SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
           SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
