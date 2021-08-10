@@ -1,5 +1,5 @@
 ARG VAULT_IMAGE_VERSION
-FROM vault:"${VAULT_IMAGE_VERSION}"
+FROM vault:${VAULT_IMAGE_VERSION}
 ARG K8S_PLUGIN_NAME=vault-k8s-secret-engine
 ARG GITHUB_REPO_HTTPS_URL=https://github.com/dzirg44/vault-k8s-secret-engine
 LABEL org.opencontainers.image.source=${GITHUB_REPO_HTTPS_URL}
