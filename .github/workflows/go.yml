@@ -60,7 +60,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           echo "${SOURCE_TAG} ${GITHUB_REPOSITORY} ${{ env.ORG }}"
-          docker build  --build-arg=${{ env.VAULT_IMAGE_VERSION }} --build-arg GITHUB_REPO_HTTPS_URL=https://github.com/${GITHUB_REPOSITORY} . --tag ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${{ env.VAULT_IMAGE_VERSION }}-${SOURCE_TAG}
+          docker build  --build-arg VAULT_IMAGE_VERSION=${{ env.VAULT_IMAGE_VERSION }} --build-arg GITHUB_REPO_HTTPS_URL=https://github.com/${GITHUB_REPOSITORY} . --tag ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${{ env.VAULT_IMAGE_VERSION }}-${SOURCE_TAG}
           docker push ghcr.io/${{ env.ORG }}/${{ env.GHCR_NAME }}:${{ env.VAULT_IMAGE_VERSION }}-${SOURCE_TAG}
         env:
           SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
